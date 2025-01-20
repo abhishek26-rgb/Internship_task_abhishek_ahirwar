@@ -1,0 +1,40 @@
+1.Retrieve the names and contact details of employees hired after January 1, 2023.
+
+select first_name,last_name,phone , hireDate from employees  where  hireDate>"2023-01-01";
+
+2.Find the total payroll amount paid to each department.
+
+select sum(p.amount) from payroll  p inner join employees e on e.employee_id=p.employeeID group by e.department_id; 
+
+3.List all employees who have not been assigned a manager.
+select first_name,last_name from employees where managerID is null;
+
+4.Retrieve the highest salary in each department along with the employee’s name.
+
+select e.first_name,max(e.salary),e.department_id ,d.department_name from employees e inner join 
+departments d on e.department_id=d.department_id group by e.department_id,e.first_name ,e.employee_id order by e.salary desc;
+
+5.Find the most recent performance review for each employee.
+
+select e.first_name,e.last_name,pr.reviewDate,pr.performanceScore from employees e join performancereviews pr on e.employee_id = pr.employee_id where
+pr.reviewDate = (select max(reviewDate) from performancereviews where employee_id = e.employee_id );
+
+
+
+6.Count the number of employees in each department.
+
+	select count(e.employee_id) ,d.department_id,d.department_name from employees e inner join departments d on e.department_id=d.department_id group by department_id;
+
+7.List all employees who have received a performance score of "Excellent."
+	select e.first_name,e.last_name ,p.performanceScore from employees e inner join performancereviews p on e.employee_id=p.employee_id where performanceScore="Excellent";
+	
+	Identify the most frequently used payment method in payroll.
+	select count(paymentMethod) as total,paymentMethod from payroll group by paymentMethod;
+
+8.Retrieve the top 5 highest-paid employees along with their departments.
+
+select e.first_name,e.last_name,e.salary,d.department_name from employees e inner join departments d on e.department_id=d.department_id order by e.salary desc limit 5;
+
+9.Show details of all employees who report directly to a specific manager (e.g.,ManagerID = 101).
+
+select * from employees where managerID=101;
