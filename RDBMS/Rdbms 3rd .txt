@@ -1,0 +1,37 @@
+1.Find the Total Number of Orders for Each Customer
+
+select customer_id,count(order_id) as total_order from orders group by order_id;
+
+2.Find the Total Sales Amount for Each Product (Revenue per Product)
+
+select product_id ,sum(quantity*unit_price) from order_details group by product_id;
+
+3.Find the Most Expensive Product Sold
+select order_id,total_amount,order_status from orders where order_status='completed' order by total_amount desc limit 1;
+
+4.Get the List of Customers Who Have Placed Orders in the Last 30 Days
+
+
+select customer_id,order_id from orders where order_date>=date_sub(now(),interval 30 days );
+
+
+5.Calculate the Total Amount Paid by Each Customer
+select o.customer_id,sum(total_amount) as paid,c.first_name from orders o inner join customers c on c.customer_id=o.customer_id group by o.customer_id;
+
+
+6.Get the Number of Products Sold by Category
+
+select count(p.product_name),p.category, o.order_status from  products p inner join order_details od on od.product_id=p.product_id inner join orders o on o.order_id=od.order_id   where o.order_status='completed' group by category;
+
+7.List All Orders That Are Pending (i.e., Orders that haven't been shipped yet)
+
+	select	 o.order_id,c.first_name from orders o join customers c on o.customer_id=c.customer_id where order_status='pending';
+
+8.Find the Average Order Value (Total Order Amount / Number of Orders)
+	select (sum(total_amount)/count(order_id)) from orders;
+
+9.List the Top 5 Customers Who Have Spent the Most Money
+select o.customer_id ,sum(total_amount) as amount,c.first_name from orders o join customers c on c.customer_id=o.customer_id group by o.customer_id, c.first_name order by amount limit 5;
+
+10.Find the Products That Have Never Been Sold
+select p.product_name,od.product_id from order_details od inner join orders o on od.order_id=o.order_id inner join products p on p.product_id =od.product_id where not o.order_status='completed';
